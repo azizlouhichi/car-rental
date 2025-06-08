@@ -1,7 +1,6 @@
 // lib/screens/reservations_screen.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../services/api_service.dart';
 import '../services/auth_service.dart';
 
 class ReservationsScreen extends StatefulWidget {
@@ -21,11 +20,10 @@ class _ReservationsScreenState extends State<ReservationsScreen> {
 
   Future<void> _loadReservations() async {
     final authService = Provider.of<AuthService>(context, listen: false);
-    final token = await authService.getToken();
+    final apiService = await authService.getApiService();
 
     try {
-      final apiService = Provider.of<ApiService>(context, listen: false);
-      final response = await apiService.get('reservations/', token: token);
+      final response = await apiService.getReservations();
       setState(() {
         _reservations = response;
         _isLoading = false;

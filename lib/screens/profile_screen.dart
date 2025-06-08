@@ -21,7 +21,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> _loadUserData() async {
     final authService = Provider.of<AuthService>(context, listen: false);
-    final user = await authService.getUser();
+    final apiService = await authService.getApiService();
+    final user = await apiService.getUsers();
     setState(() {
       _user = user;
       _isLoading = false;

@@ -50,18 +50,15 @@ class _CarDetailsScreenState extends State<CarDetailsScreen> {
 
     setState(() => _isLoading = true);
     final authService = Provider.of<AuthService>(context, listen: false);
-    final token = await authService.getToken();
+    final apiService = await authService.getApiService();
 
     try {
-      final apiService = Provider.of<ApiService>(context, listen: false);
-      await apiService.post(
-        'reservations/',
+      await apiService.createReservation(
         {
           'voiture': widget.car['id'],
           'date_debut': _startDate!.toIso8601String(),
           'date_fin': _endDate!.toIso8601String(),
         },
-        token: token,
       );
 
       ScaffoldMessenger.of(context).showSnackBar(

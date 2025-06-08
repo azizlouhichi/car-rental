@@ -24,13 +24,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _loadCars() async {
     final authService = Provider.of<AuthService>(context, listen: false);
-    final token = await authService.getToken();
+    final apiService = authService.getApiService();
 
+    setState(() => _isLoading = true);
     try {
-      final apiService = Provider.of<ApiService>(context, listen: false);
-      final response = await apiService.get('voitures/', token: token);
+      final cars = await apiService.getCars();
       setState(() {
-        _cars = response;
+        _cars = cars;
         _isLoading = false;
       });
     } catch (e) {
@@ -39,10 +39,6 @@ class _HomeScreenState extends State<HomeScreen> {
         SnackBar(
           content: Text('Failed to load cars: $e'),
           backgroundColor: Colors.red,
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
         ),
       );
     }
